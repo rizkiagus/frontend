@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>Selamat Datang</div>
+    <h1>List Pekerjaan</h1>
     <ul>
     <li v-for="item in todos" :key="item.Id">{{ item.desk }} <button @click="hapus(item.Id)">X</button></li>
     </ul>
@@ -20,19 +20,27 @@ export default {
     }
   },
   created: function() {
-    axios.get('http://localhost:3000/todo')
+    const username = localStorage.getItem('usr')
+    const password = localStorage.getItem('pwd')
+    axios.get('http://localhost:3000/todo', { headers: {username, password}})
     .then(result => {
       this.todos = result.data
     })
   },
   methods: {
     tambah: function () {
+      const username = localStorage.getItem('usr')
+      const password = localStorage.getItem('pwd')
       const newItem = { desk : this.myText }
-      axios.post('http://localhost:3000/todo', newItem)
+      axios.post('http://localhost:3000/todo', newItem, { headers: {username, password}})
+      .then(() => {
       this.todos.push(newItem)
+      })
     },
     hapus: function (id) {
-      axios.delete(`http://localhost:3000/todo/${id}`)
+      const username = localStorage.getItem('usr')
+      const password = localStorage.getItem('pwd')
+      axios.delete(`http://localhost:3000/todo/${id}`, { headers: {username, password}})
     }
   }
 }
